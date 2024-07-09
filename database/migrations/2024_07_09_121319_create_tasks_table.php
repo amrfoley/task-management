@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('auther_id');
-            $table->foreign('auther_id')->references('id')->on('users');
+            $table->unsignedBigInteger('author_id');
+            $table->foreign('author_id')->references('id')->on('users');
             $table->string('title', 150);
             $table->string('description', 300);
             $table->tinyInteger('status');
