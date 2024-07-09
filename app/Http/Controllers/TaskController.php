@@ -8,6 +8,7 @@ use App\Services\TaskService;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 
 class TaskController extends Controller
 {
@@ -39,16 +40,22 @@ class TaskController extends Controller
     public function show(Task $task)
     {
         Gate::authorize('view', $task);
+
+        return new TaskResource($task);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
         if ($request->user()->cannot('update', $task)) {
             abort(403);
         }
+
+        $task = (new TaskService())->update($request, $task);
+
+        return new TaskResource($task);
     }
 
     /**
@@ -59,5 +66,9 @@ class TaskController extends Controller
         if ($request->user()->cannot('delete', $task)) {
             abort(403);
         }
+
+        $deleted = (new TaskService())->delete($task);
+
+        return response($deleted? 'Task deleted!' : 'Failed to delete!');
     }
 }
