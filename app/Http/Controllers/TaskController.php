@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Services\TaskService;
 use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StoreTaskRequest;
 
 class TaskController extends Controller
 {
@@ -22,9 +24,13 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
         Gate::authorize('create', Task::class);
+
+        $task = (new TaskService())->createOne($request);
+
+        return new TaskResource($task);
     }
 
     /**

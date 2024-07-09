@@ -10,11 +10,11 @@ class Task extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['auther_id', 'title', 'description', 'status', 'due_date'];
+    protected $fillable = ['author_id', 'title', 'description', 'status', 'due_date'];
 
     public function author()
     {
-        return $this->belongs_to(User::class, 'author_id', 'id');
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 
     public function comments()
@@ -25,7 +25,8 @@ class Task extends Model
     protected function casts(): array
     {
         return [
-            'status' => TaskStatus::class,
+            'status'    => TaskStatus::class,
+            'due_date'  => 'date'
         ];
     }
 }

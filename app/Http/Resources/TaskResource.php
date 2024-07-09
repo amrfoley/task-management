@@ -21,7 +21,7 @@ class TaskResource extends JsonResource
             'status'        => $this->status,
             'due_date'      => $this->due_date,
             'author'        => new UserResource($this->author),
-            'comments'      => CommentResourse::collection($this->comments),
+            'comments'      => CommentResource::collection($this->comments),
             'created_at'    => $this->created_at,
             'updated_at'    => $this->updated_at,
         ];

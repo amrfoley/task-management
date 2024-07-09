@@ -13,11 +13,11 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->belongs_to(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function task()
     {
-        return $this->belongs_to(Task::class, 'task_id', 'id');
+        return $this->belongsTo(Task::class, 'task_id', 'id');
     }
 }
