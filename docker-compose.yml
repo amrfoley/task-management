@@ -1,0 +1,43 @@
+version: "1.1"
+services:
+  app:
+    build:
+      args:
+        user: www-data
+        uid: 71
+      context: ./
+      dockerfile: DockerFile
+    image: task-management
+    container_name: tm-app
+    working_dir: /var/www/html
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - task-management
+  db:
+    platform: linux/x86_64
+    image: mysql:8.0
+    container_name: tm-db
+    environment:
+      MYSQL_DATABASE: task_management
+      MYSQL_ROOT: root
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_PASSWORD:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    ports:
+      - 3306:3306
+    volumes:
+      - dbdata:/var/lib/mysql/
+    networks:
+      - task-management
+
+networks:
+  task-management:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local

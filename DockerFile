@@ -1,0 +1,44 @@
+FROM php:8.2-apache
+
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
+
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN \
+    # Set -ex and chain commands using ';' instead of '&&'.
+    set -ex; \
+    \
+    apt-get update; \
+    \
+    chmod +x /usr/local/bin/install-php-extensions; \
+    \
+    install-php-extensions mysqli pdo_mysql mbstring zip
+
+RUN apt-get -y update
+RUN apt-get -y install git zip unzip nano
+
+# Set working directory
+WORKDIR /var/www/html
+COPY . .
+COPY ./.env.example ./.env
+COPY data/.htaccess .
+COPY data/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+RUN cp .env.example .env
+# Get latest Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Create system user to run Composer and Artisan Commands
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer update --no-scripts
+RUN composer install --no-scripts
+
+RUN chown -R www-data:www-data /var/www
+RUN chmod -R a+r /var/www/html
+
+USER $user
