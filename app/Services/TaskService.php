@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TaskService
@@ -25,5 +26,15 @@ class TaskService
     public function delete(Task $task): bool
     {
         return $task->delete();
+    }
+
+    public function assigned(User $user)
+    {
+        return $user->tasks();
+    }
+    
+    public function assign(Task $task, $assignedTo)
+    {
+        return $task->update(['assigned_to' => $assignedTo]);
     }
 }

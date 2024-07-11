@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('description', 300);
             $table->tinyInteger('status');
             $table->date('due_date');
+            $table->unsignedBigInteger('assigned_to');
+            $table->foreign('assigned_to')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes('deleted_at', 0);
         });

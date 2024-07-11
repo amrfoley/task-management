@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\TaskStatus;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTaskRequest extends FormRequest
+class UpdateAssignedToTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +22,7 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'         => ['required', 'string', 'max:150'],
-            'description'   => ['required', 'string', 'max:300'],
-            'status'        => ['required', Rule::in(array_column(TaskStatus::cases(), 'value'))],
-            'due_date'      => ['required', 'date', 'after_or_equal:today'],
-            'assigned_to'   => ['nullable', 'exists:users,id']
+            'assigned_to' => ['required', 'exists:users,id']
         ];
     }
 }

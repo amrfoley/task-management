@@ -9,6 +9,7 @@ use App\Http\Resources\TaskResource;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Requests\UpdateAssignedToTaskRequest;
 
 class TaskController extends Controller
 {
@@ -70,5 +71,27 @@ class TaskController extends Controller
         $deleted = (new TaskService())->delete($task);
 
         return response($deleted? 'Task deleted!' : 'Failed to delete!');
+    }
+
+    public function assigned(Request $request)
+    {
+        if ($request->user()->cannot('showAssigned', $task)) {
+            abort(403);
+        }
+
+        $tasks = (new TaskService())->assigned($request->user());
+
+        return TaskResource::collection($tasks);
+    }
+
+    public function assign(UpdateAssignedToTaskRequest $request, Task $task)
+    {
+        if (Gate::allows('assign', $task)) {
+            abort(403);
+        }
+
+        $task = (new TaskService())->assign($task, $request->input('assigned_to'));
+
+        return new TaskResource($task);
     }
 }

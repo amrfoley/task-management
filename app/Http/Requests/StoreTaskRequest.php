@@ -28,6 +28,7 @@ class StoreTaskRequest extends FormRequest
             'description'   => ['required', 'string', 'max:300'],
             'status'        => ['required', Rule::in(array_column(TaskStatus::cases(), 'value'))],
             'due_date'      => ['required', 'date', 'after_or_equal:today'],
+            'assigned_to'   => ['nullable', 'exists:users,id']
         ];
     }
 }

@@ -15,4 +15,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', 'App\Http\Controllers\AuthController@logout')->name('logout.api');
 
     Route::resource('tasks', TaskController::class)->except(['create', 'edit']);
+
+    Route::get('tasks/assigned', [TaskController::class, 'assigned'])->name('tasks.assigned');
+    Route::post('tasks/{id}/assign', [TaskController::class, 'assign'])->name('tasks.assign');
 });

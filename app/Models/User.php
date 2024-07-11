@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'author_id', 'id');
     }
 
+    public function assingedTasks()
+    {
+        return $this->hasMany(Task::class, 'assigned_to', 'id');
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
