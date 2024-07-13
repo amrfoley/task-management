@@ -32,6 +32,22 @@ services:
       - dbdata:/var/lib/mysql/
     networks:
       - task-management
+  redis-service:
+    image: redis:latest
+    container_name: tm-redis
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    command: ["redis-server"]
+    ports:
+      - 6379:6379
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - task-management
+
 
 networks:
   task-management:
