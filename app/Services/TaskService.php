@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class TaskService
 {   
+    public function getById(string $id)
+    {
+        return Task::findOrFail($id);
+    }
+
     public function createOne(Request $request): Task
     {
         $data = $request->toArray();

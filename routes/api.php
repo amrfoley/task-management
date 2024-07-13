@@ -19,5 +19,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('tasks/assigned', [TaskController::class, 'assigned'])->name('tasks.assigned');
     Route::post('tasks/{id}/assign', [TaskController::class, 'assign'])->name('tasks.assign');
 
-    Route::resource('comments', CommentController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('tasks/{task_id}/comments', CommentController::class)->only(['index', 'store', 'update', 'destroy']);
 });

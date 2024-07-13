@@ -13,7 +13,7 @@ class CommentObserver
      */
     public function created(Comment $comment): void
     {
-        Notification::send($comment->user, new CommentPublished($comment));
+        Notification::send($comment->task->author, new CommentPublished($comment));
     }
 
     /**
@@ -21,6 +21,6 @@ class CommentObserver
      */
     public function updated(Comment $comment): void
     {
-        Notification::send($comment->user, new CommentPublished($comment));
+        Notification::send($comment->task->author, new CommentPublished($comment));
     }
 }
