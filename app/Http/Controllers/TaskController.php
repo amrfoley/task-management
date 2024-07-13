@@ -13,6 +13,8 @@ use App\Http\Requests\UpdateAssignedToTaskRequest;
 
 class TaskController extends Controller
 {
+    public function __construct(protected TaskService $taskService) {}
+
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +22,7 @@ class TaskController extends Controller
     {
         Gate::authorize('viewAny', Task::class);
 
-        return TaskResource::collection(Task::all());
+        return TaskResource::collection($this->taskService->listAll());
     }
 
     /**
@@ -30,7 +32,7 @@ class TaskController extends Controller
     {
         Gate::authorize('create', Task::class);
 
-        $task = (new TaskService())->createOne($request);
+        $task = $this->taskService->createOne($request);
 
         return new TaskResource($task);
     }
@@ -54,7 +56,7 @@ class TaskController extends Controller
             abort(403);
         }
 
-        $task = (new TaskService())->update($request, $task);
+        $task = $this->taskService->update($request, $task);
 
         return new TaskResource($task);
     }
@@ -68,7 +70,7 @@ class TaskController extends Controller
             abort(403);
         }
 
-        $deleted = (new TaskService())->delete($task);
+        $deleted = $this->taskService->delete($task);
 
         return response($deleted? 'Task deleted!' : 'Failed to delete!');
     }
@@ -79,7 +81,7 @@ class TaskController extends Controller
             abort(403);
         }
 
-        $tasks = (new TaskService())->assigned($request->user());
+        $tasks = $this->taskService->assigned($request->user());
 
         return TaskResource::collection($tasks);
     }
@@ -90,7 +92,7 @@ class TaskController extends Controller
             abort(403);
         }
 
-        $task = (new TaskService())->assign($task, $request->input('assigned_to'));
+        $task = $this->taskService->assign($task, $request->input('assigned_to'));
 
         return new TaskResource($task);
     }

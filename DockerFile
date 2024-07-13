@@ -14,10 +14,10 @@ RUN \
     \
     chmod +x /usr/local/bin/install-php-extensions; \
     \
-    install-php-extensions mysqli pdo_mysql mbstring zip
+    install-php-extensions mysqli pdo_mysql mbstring zip redis
 
 RUN apt-get -y update
-RUN apt-get -y install git zip unzip nano
+RUN apt-get -y install git zip unzip nano redis-server
 
 # Set working directory
 WORKDIR /var/www/html
